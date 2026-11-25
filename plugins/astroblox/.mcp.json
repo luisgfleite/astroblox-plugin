@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "astroblox": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/server/astroblox-mcp.mjs"],
+      "env": { "ASTROBLOX_CLIENT": "claude" }
+    }
+  }
+}

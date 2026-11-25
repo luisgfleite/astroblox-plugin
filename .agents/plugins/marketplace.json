@@ -1,0 +1,12 @@
+{
+  "name": "astroblox",
+  "interface": { "displayName": "AstroBlox" },
+  "plugins": [
+    {
+      "name": "astroblox",
+      "source": { "source": "local", "path": "./plugins/astroblox" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    }
+  ]
+}

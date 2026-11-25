@@ -1,0 +1,53 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "astroblox",
+  "version": "1.3.0",
+  "description": "Cria VFX, modelos 3D (Tripo AI), interfaces e animações R15 para Roblox com IA e instala no Roblox Studio.",
+  "author": {
+    "name": "AstroBlox",
+    "url": "https://astroblox.site"
+  },
+  "homepage": "https://astroblox.site",
+  "keywords": [
+    "roblox",
+    "vfx",
+    "3d",
+    "gui",
+    "interface",
+    "roblox-studio",
+    "game-dev"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "AstroBlox",
+        "shortDescription": "VFX, 3D, interfaces e animações Roblox",
+        "longDescription": "O AstroBlox cria VFX, modelos 3D, interfaces (GUI) e animações R15 para jogos do Roblox a partir de uma descrição em português. Modelos 3D nascem de uma referência 2D reconstruída pela Tripo AI como GLB texturizado. Animações R15 viram KeyframeSequence pronta para o Studio. As interfaces vêm com fontes do tema do jogo, fundo colorível em movimento e animações. O plugin mostra o orçamento por roteiro de IA, imagem e 3D antes de gerar; quando o próprio agente escreve o plano, o roteiro sai grátis. Presets de VFX do catálogo são gratuitos. A conta é conectada por um código aprovado no navegador.",
+        "developerName": "AstroBlox",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Cria VFX, auras e partículas originais para Roblox",
+          "Cria modelos 3D texturizados com a Tripo AI a partir de uma referência 2D",
+          "Cria animações R15 (golpes, danças, idles) a partir de texto",
+          "Cria interfaces (GUI) animadas com fontes do tema do jogo e fundo colorível",
+          "Instala e testa no Roblox Studio pelo MCP do Studio",
+          "Mostra saldo, plano e orçamento antes de cada geração"
+        ],
+        "websiteURL": "https://astroblox.site",
+        "supportURL": "https://astroblox.site/guia",
+        "privacyPolicyURL": "https://astroblox.site/privacidade",
+        "termsOfServiceURL": "https://astroblox.site/termos",
+        "defaultPrompt": [
+          "$astroblox Crie uma aura de fogo com chifres para meu personagem",
+          "$astroblox Crie uma loja de pets animada para meu jogo infantil",
+          "$astroblox Crie um modelo 3D de espada de cristal",
+          "$astroblox Crie uma animação de golpe de espada para R15"
+        ],
+        "brandColor": "#6CC4FF",
+        "brandColorDark": "#6CC4FF",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "astroblox",
+  "displayName": "AstroBlox",
+  "version": "1.3.0",
+  "description": "Cria VFX, modelos 3D (Tripo AI), interfaces e animações R15 para Roblox com IA e instala no Roblox Studio.",
+  "author": {
+    "name": "AstroBlox",
+    "url": "https://astroblox.site"
+  },
+  "homepage": "https://astroblox.site",
+  "license": "LicenseRef-AstroBlox",
+  "keywords": [
+    "roblox",
+    "vfx",
+    "aura",
+    "particles",
+    "roblox-studio",
+    "3d",
+    "game-dev"
+  ],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://astroblox.site/guia",
+  "supportUrl": "https://astroblox.site/guia#suporte",
+  "privacyPolicyUrl": "https://astroblox.site/privacidade",
+  "termsOfServiceUrl": "https://astroblox.site/termos",
+  "network": {
+    "hosts": [
+      "astroblox.site",
+      "www.astroblox.site",
+      "astroblox-studio.vercel.app",
+      "ijewekfyixwiyjbkspem.supabase.co"
+    ]
+  }
+}
