@@ -1,13 +1,15 @@
 ---
 name: astroblox
-description: Cria VFX, modelos 3D (Tripo AI), interfaces (GUI) e animações R15 para Roblox com a conta AstroBlox e instala no Roblox Studio. Use when the user asks for a Roblox VFX, aura, particle effect, 3D model or asset, a GUI/interface/HUD/menu/shop screen, a character animation or emote, an AstroBlox preset or an AstroBlox job ID.
+description: Cria VFX, modelos 3D, interfaces (GUI) e animações R15 para Roblox com a conta AstroBlox e instala no Roblox Studio. Use when the user asks for a Roblox VFX, aura, particle effect, 3D model or asset, a GUI/interface/HUD/menu/shop screen, a character animation or emote, an AstroBlox preset or an AstroBlox job ID.
 ---
 
 # AstroBlox
 
-AstroBlox makes four things for Roblox games: **VFX** (auras, hits, particles), **3D models** (a 2D reference rebuilt in 3D by Tripo AI as a textured GLB), **interfaces (GUI)** with animations, and **R15 animations** from a text description.
+AstroBlox makes four things for Roblox games: **VFX** (auras, hits, particles), **3D models** (a 2D reference rebuilt in 3D as a textured GLB), **interfaces (GUI)** with animations, and **R15 animations** from a text description.
 
 Reply in the user's language (default: Brazilian Portuguese). Keep messages short and show links as clickable Markdown.
+
+**Never name the AI models or providers behind AstroBlox** (no model, vendor or "LLM" names) when talking to the user. Say "a IA do AstroBlox", "o roteiro da animação", "as texturas", "o modelo 3D".
 
 ## 1. Connect the account
 
@@ -18,23 +20,31 @@ Reply in the user's language (default: Brazilian Portuguese). Keep messages shor
 
 ## 2. How credits work
 
-Credits are charged per resource actually produced: **AI plan (LLM)**, **images** and **3D models (Tripo AI)**. Failed parts are refunded.
+Credits pay for what is actually produced: **images and textures**, **3D models** and, for animations only, **the animation script** written by the AstroBlox AI. Planning a VFX, an interface or a model never costs credits. Anything not used, or any failed part, goes back to the account.
 
-**Write the plan yourself whenever you can.** Call `astroblox_plan_guide` with the kind (`vfx`, `gui`, `model` or `anim`), follow its instructions and JSON Schema exactly, and pass the JSON object as `plan` in `astroblox_create`. The AI plan is then free; an animation planned by you costs nothing. Use the user's game context (place name, existing UI, art style) when writing it. If the server rejects the plan, it lists the fields to fix: correct them and call `astroblox_create` again.
+**Write the plan yourself whenever you can.** Call `astroblox_plan_guide` with the kind (`vfx`, `gui`, `model` or `anim`), follow its instructions and JSON Schema exactly, and pass the JSON object as `plan` in `astroblox_create`. The quote then counts exactly what your plan asks for, and an animation planned by you costs nothing. Use the user's game context (place name, existing UI, art style) when writing it. If the server rejects the plan, it lists the fields to fix: correct them and call `astroblox_create` again.
 
 ## 3. Pick the path
 
 - **Free preset.** For "uma aura vermelha", "aura de linhas azul" or a named reference, call `astroblox_create` with the request (or search `astroblox_aura_catalog` and pass the exact `preset` ID). A `preset_ready` answer gives `templateFile`, `propertiesFile`, `installerFile` and `options`. No credits are used.
   - If the user only gives a color and the style is open, ask: **"Você quer uma aura de linhas, de energia, de ki ou de outro estilo?"** and wait.
 - **Original VFX.** `kind: "vfx"` with `auraMode: "generate"` (or your own `plan`).
-- **3D model.** `kind: "model"`: AstroBlox draws a clean 2D studio reference, then Tripo AI rebuilds it as a textured GLB. Pass `quality: "game"` (light, low poly, default) or `"hd"` (more detail, PBR). If the user has a concept image, pass its local path in `referenceImage`: Tripo uses it directly and no image is charged. For a hand-built asset in Blender use `kind: "3d"` (build sheet with meshes, textures and sounds that you assemble).
+- **3D model.** `kind: "model"`: AstroBlox draws a clean 2D studio reference, then AstroBlox rebuilds it as a textured GLB. Pass `quality: "game"` (light, low poly, default) or `"hd"` (more detail, PBR). If the user has a concept image, pass its local path in `referenceImage`: it is used directly and no image is charged. For a hand-built asset in Blender use `kind: "3d"` (build sheet with meshes, textures and sounds that you assemble).
 - **Interface (GUI).** `kind: "gui"` with `gameStyle` (cartoon, anime, horror, fantasy, scifi, modern, retro, sport) and `audience` (kids, teen, adult). Infer both from the place: the game's name, existing UI fonts and colors in StarterGui and the map theme. Every interface comes with fonts that fit the game, a generated grayscale background tile the game tints and keeps moving, and entrance, idle, hover and press animations run by the `AstroBloxUIAnimator` LocalScript.
 - **R15 animation.** `kind: "anim"` with `duration` and `loop`. Write the keyframes yourself with `astroblox_plan_guide` (`anim`) whenever possible: it is free and you can match the game's rig and timing.
 - **Existing job.** Call `astroblox_job` with the ID from the site or a previous chat.
 
-Show the `breakdown` and `maximumCredits` and whether `usesFreeVfx` is true. If `enough` is false, show the `topUp` link and stop. Only after the user accepts, call `astroblox_confirm` with the same `quote` ID and keep the returned job ID.
+### Approve the cost first
 
-Poll `astroblox_job` about every 20 seconds while it is `queued` or `running`, telling the user the `stage` (plan, reference, mesh, images, package). When it is `done`, call it again with `download: true`; the files land in a local folder (`folder`). Share the `preview` link: the studio shows the 3D model and plays the animation on an R15 avatar. If it `failed`, the credits were returned: say so and offer to retry with a clearer prompt.
+**Never start a generation without the user's approval.** Show the quote's `message` (for example **"Vai gastar até 50 créditos"**), the `breakdown` in one short line each, and whether `usesFreeVfx` is true. Then ask **"Posso gerar?"** and wait. If `enough` is false, show the `topUp` link and stop. Only after a clear yes, call `astroblox_confirm` with the same `quote` ID and keep the returned job ID.
+
+### Narrate while it is made
+
+Poll `astroblox_job` about every 20 seconds while it is `queued` or `running`. Each answer has a `news` list with the steps finished since the last call (for example "Modelou o objeto em 3D · 75 créditos"): tell the user each new step in one line, with its credits, and the running total `spent` of the approved maximum. When it is `done`, call it again with `download: true`; the files land in a local folder (`folder`). Share the `preview` link: the studio shows the 3D model and plays the animation on an R15 avatar. If it `failed`, the credits were returned: say so and offer to retry with a clearer prompt.
+
+### Always finish with the install tutorial
+
+A `done` job carries `install`: the numbered steps to put the creation in the game (also saved as `COMO-INSTALAR.txt`). **Always show this tutorial to the user**, numbered, even when you install it yourself in section 4, so they can do it again by hand.
 
 ## 4. Install in Roblox Studio
 
@@ -53,7 +63,7 @@ Keep server triggers authoritative and visual playback on the client. Clean up t
 
 1. Start Play and look at the result from the front and from a three-quarter view, while idle and while moving.
 2. Confirm textures loaded, the scale matches the character, the face stays readable and nothing is left behind after respawn.
-3. Report what was installed (instance paths), how to trigger it, the credits spent (`astroblox_account`) and anything still pending (for example, publishing an animation).
+3. Report what was installed (instance paths), how to trigger it, the credits spent (`astroblox_account`), anything still pending (for example, publishing an animation) and the numbered install tutorial from `install`.
 
 ## Errors
 

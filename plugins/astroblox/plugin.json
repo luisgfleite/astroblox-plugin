@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "astroblox",
-  "version": "1.3.0",
-  "description": "Cria VFX, modelos 3D (Tripo AI), interfaces e animações R15 para Roblox com IA e instala no Roblox Studio.",
+  "version": "1.3.1",
+  "description": "Cria VFX, modelos 3D, interfaces e animações R15 para Roblox com IA e instala no Roblox Studio.",
   "author": {
     "name": "AstroBlox",
     "url": "https://astroblox.site"
@@ -22,12 +22,12 @@
       "interface": {
         "displayName": "AstroBlox",
         "shortDescription": "VFX, 3D, interfaces e animações Roblox",
-        "longDescription": "O AstroBlox cria VFX, modelos 3D, interfaces (GUI) e animações R15 para jogos do Roblox a partir de uma descrição em português. Modelos 3D nascem de uma referência 2D reconstruída pela Tripo AI como GLB texturizado. Animações R15 viram KeyframeSequence pronta para o Studio. As interfaces vêm com fontes do tema do jogo, fundo colorível em movimento e animações. O plugin mostra o orçamento por roteiro de IA, imagem e 3D antes de gerar; quando o próprio agente escreve o plano, o roteiro sai grátis. Presets de VFX do catálogo são gratuitos. A conta é conectada por um código aprovado no navegador.",
+        "longDescription": "O AstroBlox cria VFX, modelos 3D, interfaces (GUI) e animações R15 para jogos do Roblox a partir de uma descrição em português. Modelos 3D nascem de uma referência 2D reconstruída como GLB texturizado. Animações R15 viram KeyframeSequence pronta para o Studio. As interfaces vêm com fontes do tema do jogo, fundo colorível em movimento e animações. Antes de gerar, o plugin mostra quanto vai gastar no máximo e espera a sua aprovação; durante a geração conta o que fez e quanto gastou, e no fim ensina a instalar no jogo. Presets de VFX do catálogo são gratuitos. A conta é conectada por um código aprovado no navegador.",
         "developerName": "AstroBlox",
         "category": "Developer Tools",
         "capabilities": [
           "Cria VFX, auras e partículas originais para Roblox",
-          "Cria modelos 3D texturizados com a Tripo AI a partir de uma referência 2D",
+          "Cria modelos 3D texturizados a partir de uma referência 2D",
           "Cria animações R15 (golpes, danças, idles) a partir de texto",
           "Cria interfaces (GUI) animadas com fontes do tema do jogo e fundo colorível",
           "Instala e testa no Roblox Studio pelo MCP do Studio",

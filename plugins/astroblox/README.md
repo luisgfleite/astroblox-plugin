@@ -4,7 +4,7 @@ Crie VFX, modelos 3D e interfaces (GUI) para Roblox descrevendo o que você quer
 
 ## Instalação
 
-- **Claude Code:** `/plugin marketplace add https://astroblox.site/claude/marketplace.json` e depois `/plugin install astroblox@astroblox`.
+- **Claude Code:** `/plugin marketplace add luisgfleite/astroblox-plugin` e depois `/plugin install astroblox@astroblox`.
 - **Codex:** `codex plugin marketplace add luisgfleite/astroblox-plugin` e depois `codex plugin add astroblox@astroblox`.
 
 No primeiro pedido o agente mostra um código. Aprove em https://astroblox.site/conectar com a sua conta AstroBlox. Presets do catálogo são gratuitos; gerações originais usam os créditos do seu plano.

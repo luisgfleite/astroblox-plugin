@@ -36718,7 +36718,7 @@ function selectAura(presets, request, style, reference) {
 }
 
 // packages/mcp/src/cloud.ts
-var VERSION = "1.3.0";
+var VERSION = "1.3.1";
 var DEFAULT_SITE = "https://astroblox.site";
 var home = process.env.ASTROBLOX_HOME || join(homedir(), ".astroblox");
 var envFile = process.env.ASTROBLOX_ENV_FILE || join(home, ".env");
@@ -36937,9 +36937,9 @@ server.registerTool(
     return {
       creditsPerBasicVfx: r.basic,
       pricePerUnit: r.prices ? {
-        aiPlan: r.prices.llm + " cr\xE9ditos por roteiro da IA AstroBlox (gr\xE1tis quando voc\xEA escreve o plano)",
-        image: r.prices.image + " cr\xE9ditos por imagem",
-        model3d: r.prices.mesh + " cr\xE9ditos por modelo 3D (Tripo AI)"
+        animationScript: r.prices.llm + " cr\xE9ditos por roteiro de anima\xE7\xE3o longo (gr\xE1tis quando voc\xEA escreve o roteiro)",
+        image: r.prices.image + " cr\xE9ditos por imagem ou textura",
+        model3d: r.prices.mesh + " cr\xE9ditos por modelo 3D"
       } : void 0,
       typicalCost: r.examples,
       freeTrial: r.trial ?? void 0,
@@ -36989,7 +36989,7 @@ server.registerTool(
 server.registerTool(
   "astroblox_plan_guide",
   {
-    description: "Instru\xE7\xF5es e JSON Schema para VOC\xCA escrever o plano de uma cria\xE7\xE3o (vfx, gui, model ou anim). Passe o plano em astroblox_create.plan: o roteiro de IA sai gr\xE1tis e s\xF3 imagens e 3D s\xE3o cobrados.",
+    description: "Instru\xE7\xF5es e JSON Schema para VOC\xCA escrever o plano de uma cria\xE7\xE3o (vfx, gui, model ou anim). Passe o plano em astroblox_create.plan: o or\xE7amento conta exatamente o que o plano pede, e uma anima\xE7\xE3o com roteiro seu n\xE3o gasta cr\xE9ditos.",
     inputSchema: { kind: external_exports.enum(["vfx", "gui", "model", "anim"]) }
   },
   tool(async ({ kind }) => api("schema/" + kind, void 0, true))
@@ -37016,13 +37016,13 @@ async function uploadReference(file2) {
 server.registerTool(
   "astroblox_create",
   {
-    description: "Abrir um preset gratuito ou calcular o or\xE7amento de VFX, modelo 3D (refer\xEAncia 2D + Tripo AI, GLB texturizado), interface (GUI) ou anima\xE7\xE3o R15. Para economizar o roteiro de IA, escreva o plano com astroblox_plan_guide e envie em plan. Mostre o custo ao usu\xE1rio e espere a aprova\xE7\xE3o antes de chamar astroblox_confirm.",
+    description: 'Abrir um preset gratuito ou calcular o or\xE7amento de VFX, modelo 3D (refer\xEAncia 2D + GLB texturizado), interface (GUI) ou anima\xE7\xE3o R15. Sempre que puder, escreva o plano com astroblox_plan_guide e envie em plan. Mostre ao usu\xE1rio a message ("Vai gastar at\xE9 X cr\xE9ditos") e o breakdown, pergunte se pode gerar e s\xF3 chame astroblox_confirm depois de um sim. Nunca cite nomes de modelos ou fornecedores de IA ao usu\xE1rio.',
     inputSchema: {
       request: external_exports.string().min(3).max(2e3),
-      kind: external_exports.enum(["vfx", "model", "gui", "anim", "3d", "model3d"]).default("vfx").describe("model: GLB pela Tripo AI; anim: anima\xE7\xE3o R15; 3d/model3d: kit para montar no Blender"),
+      kind: external_exports.enum(["vfx", "model", "gui", "anim", "3d", "model3d"]).default("vfx").describe("model: GLB texturizado; anim: anima\xE7\xE3o R15; 3d/model3d: kit para montar no Blender"),
       plan: external_exports.record(external_exports.string(), external_exports.unknown()).optional().describe("Plano escrito por voc\xEA seguindo astroblox_plan_guide (deixa o roteiro de IA gr\xE1tis)"),
       quality: external_exports.enum(["game", "hd"]).optional().describe("model: game = low poly leve, hd = alta defini\xE7\xE3o"),
-      referenceImage: external_exports.string().optional().describe("model: caminho local de uma imagem PNG/JPG/WEBP para a Tripo reconstruir em 3D"),
+      referenceImage: external_exports.string().optional().describe("model: caminho local de uma imagem PNG/JPG/WEBP para reconstruir em 3D"),
       duration: external_exports.number().min(0.3).max(20).optional().describe("anim: dura\xE7\xE3o em segundos"),
       loop: external_exports.boolean().optional().describe("anim: repetir em loop"),
       gameStyle: external_exports.enum(["cartoon", "anime", "horror", "fantasy", "scifi", "modern", "retro", "sport"]).optional().describe("GUI: genre of the game; it decides the fonts"),
@@ -37074,17 +37074,20 @@ server.registerTool(
     const a = await api("account");
     const units = q.breakdown?.units ?? {};
     const unitPrice = q.breakdown?.prices ?? {};
+    const free = order === "vfx" && a.bonus > 0;
     return {
       status: "quote_ready",
       quote: q.id,
       maximumCredits: q.maximum,
+      message: free ? "Este VFX sai de cortesia (0 cr\xE9ditos). Posso gerar?" : "Vai gastar at\xE9 " + q.maximum + " cr\xE9ditos. Posso gerar?",
       breakdown: [
-        units.llm && { item: "Roteiro de IA (LLM)", units: units.llm, credits: units.llm * unitPrice.llm },
-        q.clientPlan && { item: "Roteiro escrito por voc\xEA", credits: 0 },
-        units.image && { item: "Imagens", units: units.image, credits: units.image * unitPrice.image },
-        units.mesh && { item: "Modelo 3D (Tripo AI)", units: units.mesh, credits: units.mesh * unitPrice.mesh }
+        units.llm && { item: "Roteiro da anima\xE7\xE3o", units: units.llm, credits: units.llm * unitPrice.llm },
+        q.clientPlan && order === "anim" && { item: "Roteiro escrito por voc\xEA", credits: 0 },
+        units.image && { item: "Imagens e texturas", units: units.image, credits: units.image * unitPrice.image },
+        units.mesh && { item: "Modelo 3D", units: units.mesh, credits: units.mesh * unitPrice.mesh }
       ].filter(Boolean),
-      usesFreeVfx: order === "vfx" && a.bonus > 0,
+      note: "\xC9 o m\xE1ximo: o que n\xE3o for usado volta para a conta, e se algo falhar tudo volta.",
+      usesFreeVfx: free,
       balance: a.balance,
       enough: order === "vfx" && a.bonus > 0 || a.balance >= q.maximum,
       expires: q.expires_at,
@@ -37103,10 +37106,11 @@ server.registerTool(
     return { ...r, next: "Acompanhe com astroblox_job usando este id." };
   })
 );
+var told = /* @__PURE__ */ new Map();
 server.registerTool(
   "astroblox_job",
   {
-    description: "Retomar um pedido do site ou do plugin; com download true salva os arquivos locais quando estiver pronto",
+    description: "Acompanhar um pedido do site ou do plugin. news traz as etapas conclu\xEDdas desde a \xFAltima consulta, com os cr\xE9ditos de cada uma: conte cada etapa ao usu\xE1rio. Quando estiver pronto, install traz o tutorial de instala\xE7\xE3o no jogo: mostre sempre, numerado. Com download true salva os arquivos locais.",
     inputSchema: {
       jobId: external_exports.string().uuid(),
       download: external_exports.boolean().default(false)
@@ -37114,6 +37118,12 @@ server.registerTool(
   },
   tool(async ({ jobId, download }) => {
     const job = await api("jobs/" + jobId);
+    const log = Array.isArray(job.log) ? job.log : [];
+    const seen = told.get(jobId) ?? 0;
+    told.set(jobId, log.length);
+    job.news = log.slice(seen).map((e) => e.credits > 0 && !job.promo ? e.text + " \xB7 " + e.credits + " cr\xE9ditos" : e.text);
+    job.progress = job.promo ? "VFX de cortesia" : (job.state === "done" ? job.charged ?? job.spent : job.spent) + " de at\xE9 " + job.ab_quotes?.maximum + " cr\xE9ditos";
+    delete job.log;
     if (download && job.state === "done") {
       await mkdir(join(home, "jobs"), { recursive: true });
       const dir = await mkdtemp(join(home, "jobs", jobId + "-"));
