@@ -43,8 +43,8 @@
           "$astroblox Crie um modelo 3D de espada de cristal",
           "$astroblox Crie uma animação de golpe de espada para R15"
         ],
-        "brandColor": "#6CC4FF",
-        "brandColorDark": "#6CC4FF",
+        "brandColor": "#FFC25E",
+        "brandColorDark": "#FFC25E",
         "composerIcon": "./assets/icon.png",
         "logo": "./assets/logo.png"
       }
