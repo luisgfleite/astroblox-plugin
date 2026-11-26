@@ -2,7 +2,7 @@
 
 Crie **VFX, modelos 3D, interfaces animadas e animações R15** para Roblox a partir de uma descrição, e instale tudo no Roblox Studio pelo seu agente.
 
-Versão 1.3.1 · [astroblox.site](https://astroblox.site)
+Versão 1.3.2 · [astroblox.site](https://astroblox.site)
 
 ## Instalar no Codex
 

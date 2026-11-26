@@ -20,9 +20,9 @@ Reply in the user's language (default: Brazilian Portuguese). Keep messages shor
 
 ## 2. How credits work
 
-Credits pay for what is actually produced: **images and textures**, **3D models** and, for animations only, **the animation script** written by the AstroBlox AI. Planning a VFX, an interface or a model never costs credits. Anything not used, or any failed part, goes back to the account.
+Credits pay for what is actually produced: **images and textures**, **3D models** (a model from the user's own image has its own price) and **each animation**. Planning a VFX, an interface or a model never costs credits. Anything not used, or any failed part, goes back to the account.
 
-**Write the plan yourself whenever you can.** Call `astroblox_plan_guide` with the kind (`vfx`, `gui`, `model` or `anim`), follow its instructions and JSON Schema exactly, and pass the JSON object as `plan` in `astroblox_create`. The quote then counts exactly what your plan asks for, and an animation planned by you costs nothing. Use the user's game context (place name, existing UI, art style) when writing it. If the server rejects the plan, it lists the fields to fix: correct them and call `astroblox_create` again.
+**Write the plan yourself whenever you can.** Call `astroblox_plan_guide` with the kind (`vfx`, `gui`, `model` or `anim`), follow its instructions and JSON Schema exactly, and pass the JSON object as `plan` in `astroblox_create`. The quote then counts exactly what your plan asks for. Use the user's game context (place name, existing UI, art style) when writing it. If the server rejects the plan, it lists the fields to fix: correct them and call `astroblox_create` again.
 
 ## 3. Pick the path
 

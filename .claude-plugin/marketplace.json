@@ -1,13 +1,13 @@
 {
   "name": "astroblox",
   "owner": { "name": "AstroBlox", "url": "https://astroblox.site" },
-  "metadata": { "description": "Plugins AstroBlox para criadores de Roblox", "version": "1.3.1" },
+  "metadata": { "description": "Plugins AstroBlox para criadores de Roblox", "version": "1.3.2" },
   "plugins": [
     {
       "name": "astroblox",
       "source": "./plugins/astroblox",
       "description": "Cria VFX, modelos 3D, interfaces e animações R15 para Roblox com IA e instala no Roblox Studio.",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "category": "development",
       "tags": ["roblox", "vfx", "3d"]
     }

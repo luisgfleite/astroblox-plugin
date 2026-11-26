@@ -36718,7 +36718,7 @@ function selectAura(presets, request, style, reference) {
 }
 
 // packages/mcp/src/cloud.ts
-var VERSION = "1.3.1";
+var VERSION = "1.3.2";
 var DEFAULT_SITE = "https://astroblox.site";
 var home = process.env.ASTROBLOX_HOME || join(homedir(), ".astroblox");
 var envFile = process.env.ASTROBLOX_ENV_FILE || join(home, ".env");
@@ -36937,9 +36937,10 @@ server.registerTool(
     return {
       creditsPerBasicVfx: r.basic,
       pricePerUnit: r.prices ? {
-        animationScript: r.prices.llm + " cr\xE9ditos por roteiro de anima\xE7\xE3o longo (gr\xE1tis quando voc\xEA escreve o roteiro)",
+        animationScript: r.prices.llm + " cr\xE9dito(s) por anima\xE7\xE3o",
         image: r.prices.image + " cr\xE9ditos por imagem ou textura",
-        model3d: r.prices.mesh + " cr\xE9ditos por modelo 3D"
+        model3d: r.prices.mesh + " cr\xE9ditos por modelo 3D gerado do zero (mais 1 imagem da refer\xEAncia)",
+        model3dFromImage: (r.prices.meshOwn ?? r.prices.mesh) + " cr\xE9ditos por modelo 3D feito da imagem do usu\xE1rio"
       } : void 0,
       typicalCost: r.examples,
       freeTrial: r.trial ?? void 0,
@@ -36989,7 +36990,7 @@ server.registerTool(
 server.registerTool(
   "astroblox_plan_guide",
   {
-    description: "Instru\xE7\xF5es e JSON Schema para VOC\xCA escrever o plano de uma cria\xE7\xE3o (vfx, gui, model ou anim). Passe o plano em astroblox_create.plan: o or\xE7amento conta exatamente o que o plano pede, e uma anima\xE7\xE3o com roteiro seu n\xE3o gasta cr\xE9ditos.",
+    description: "Instru\xE7\xF5es e JSON Schema para VOC\xCA escrever o plano de uma cria\xE7\xE3o (vfx, gui, model ou anim). Passe o plano em astroblox_create.plan: o or\xE7amento conta exatamente o que o plano pede, e cada anima\xE7\xE3o custa o pre\xE7o de animationScript em astroblox_plans.",
     inputSchema: { kind: external_exports.enum(["vfx", "gui", "model", "anim"]) }
   },
   tool(async ({ kind }) => api("schema/" + kind, void 0, true))
@@ -37082,9 +37083,9 @@ server.registerTool(
       message: free ? "Este VFX sai de cortesia (0 cr\xE9ditos). Posso gerar?" : "Vai gastar at\xE9 " + q.maximum + " cr\xE9ditos. Posso gerar?",
       breakdown: [
         units.llm && { item: "Roteiro da anima\xE7\xE3o", units: units.llm, credits: units.llm * unitPrice.llm },
-        q.clientPlan && order === "anim" && { item: "Roteiro escrito por voc\xEA", credits: 0 },
         units.image && { item: "Imagens e texturas", units: units.image, credits: units.image * unitPrice.image },
-        units.mesh && { item: "Modelo 3D", units: units.mesh, credits: units.mesh * unitPrice.mesh }
+        units.mesh && { item: "Modelo 3D", units: units.mesh, credits: units.mesh * unitPrice.mesh },
+        units.meshOwn && { item: "Modelo 3D da sua imagem", units: units.meshOwn, credits: units.meshOwn * unitPrice.meshOwn }
       ].filter(Boolean),
       note: "\xC9 o m\xE1ximo: o que n\xE3o for usado volta para a conta, e se algo falhar tudo volta.",
       usesFreeVfx: free,
